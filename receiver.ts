@@ -10,5 +10,5 @@ const isFrameValid = (payload: string, receivedParityBit: string): boolean => {
   return false;
 };
 
-console.log(isFrameValid("10101", "1"));
-console.log(isFrameValid("10101", "0"));
+console.log(isFrameValid("10101", "1")); // false
+console.log(isFrameValid("10101", "0")); // true
