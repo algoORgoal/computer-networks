@@ -4,7 +4,7 @@ const timeoutDuration = 3000;
 let awaitingAck = false;
 
 const sendFrame = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  await new Promise((resolve) => setTimeout(resolve, 3000)); // mock network delay
   if (awaitingAck) return;
 
   console.log(`Sender sent frame with SEQ ${seq}`);
@@ -17,7 +17,7 @@ const sendFrame = async () => {
       body: JSON.stringify({ seq }),
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // mock network delay
 
     if (response.ok) {
       const { ack } = await response.json();

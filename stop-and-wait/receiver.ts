@@ -16,7 +16,7 @@ const server = createServer((req, res) => {
   });
 
   req.on("end", async () => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // mock network delay
     const { seq } = JSON.parse(body);
     if (seq === expectedSeq) {
       console.log(`Receiver received frame with SEQ ${seq}.`);
@@ -28,7 +28,7 @@ const server = createServer((req, res) => {
       await new Promise((resolve) => {
         console.log("Processing...");
         setTimeout(resolve, 3000);
-      });
+      }); // mock network delay
 
       console.log(`Receiver sent ACK ${expectedSeq}`);
 
