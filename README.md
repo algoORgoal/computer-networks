@@ -6,6 +6,10 @@ This repository recreates various protocols and techniques used in computer netw
 > I hear and I forget. I see and I remember. I do and I understand.
 > – *Benjamin Franklin*
 
+## Stop-and-wait ARQ
+![stop-and-wait-arq_1](https://github.com/user-attachments/assets/885a669e-8bbe-4440-a6cb-b5b8dbb74613)
+
+
 
 
 ## How to run
