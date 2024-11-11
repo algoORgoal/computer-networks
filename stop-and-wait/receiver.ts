@@ -1,34 +1,50 @@
 import { createServer } from "http";
 
-let expectedFrame = 0;
+let expectedSeq = 0;
 
-const server = createServer(({ method, url, on }, res) => {
-  if (method !== "POST" || url !== "/frame") {
+const server = createServer((req, res) => {
+  if (req.method !== "POST" || req.url !== "/frame") {
     res.writeHead(404);
     res.end();
+    return;
   }
 
   let body = "";
 
-  on("data", (chunk) => {
+  req.on("data", (chunk) => {
     body += chunk.toString();
   });
 
-  on("end", () => {
-    const { frame } = JSON.parse(body);
-    if (frame === expectedFrame) {
-      console.log(`Receiver: Frame ${frame} received correctly.`);
-      expectedFrame = (expectedFrame + 1) % 2;
+  req.on("end", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    const { seq } = JSON.parse(body);
+    if (seq === expectedSeq) {
+      console.log(`Receiver received frame with SEQ ${seq}.`);
+      expectedSeq = (expectedSeq + 1) % 2;
       res.writeHead(200, {
         "content-type": "application/json",
       });
-      res.end(JSON.stringify({ acknowledgement: frame }));
+
+      await new Promise((resolve) => {
+        console.log("Processing...");
+        setTimeout(resolve, 3000);
+      });
+
+      console.log(`Receiver sent ACK ${expectedSeq}`);
+
+      res.end(JSON.stringify({ ack: expectedSeq }));
     } else {
       console.log(
-        `Receiver : Duplicate frame ${frame} received. It will be discarded.`
+        `Receiver received duplicate frame with SEQ ${seq}. It will be discarded.`
       );
       res.writeHead(200, { "content-type": "application/json" });
-      res.end(JSON.stringify({ acknowledgement: expectedFrame === 0 ? 1 : 0 }));
+
+      await new Promise((resolve) => {
+        console.log("Processing...");
+        setTimeout(resolve, 3000);
+      });
+      console.log(`Receiver sent ACK ${expectedSeq}`);
+      res.end(JSON.stringify({ ack: expectedSeq }));
     }
   });
 });
